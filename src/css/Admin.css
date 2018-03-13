@@ -1,0 +1,151 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+ul>li {
+	list-style: none;
+	cursor: pointer;
+}
+
+form > input{
+	border: 1px solid #ccc;
+  	border-radius: 4px;
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+form >input:focus {
+  border-color: #66afe9;
+  outline: 0;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.9);
+}
+
+.clearFix:after {
+	content: '';
+	display: block;
+	clear: both;
+}
+
+body,
+html {
+	height: 100vh;
+	width: 100%;
+	background: url(../img/admin-BG.jpg) no-repeat center center;
+	background-size: cover;
+	position: relative;
+}
+
+.bodyCover {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	background: rgba(0, 0, 0, 0.7);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.mainContainer {
+	width: 1200px;
+	height: 768px;
+	min-width: 1024px;
+	background: rgba(255, 255, 255, 0.4);
+	border-radius: 5px;
+	display: flex;
+	flex-direction: row;
+	overflow: hidden;
+}
+
+.mainContainer>aside {
+	width: 25%;
+	border-right: 1px solid #09000E;
+	overflow: hidden;
+}
+
+.mainContainer>aside>header {
+	width: 100%;
+	height: 50px;
+	line-height: 30px;
+	padding: 10px 20px;
+	background: firebrick;
+	color: #FFF;
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.mainContainer>aside>ul {
+	width: 100%;
+	height: 718px;
+	padding: 10px 20px;
+	user-select: none;
+	overflow: auto;
+}
+
+.mainContainer>aside>ul>li {
+	height: 30px;
+	padding: 5px 10px;
+	line-height: 20px;
+	font-size: 13px;
+	color: #FFF;
+	margin: 10px 0;
+	transition: all .5s;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.mainContainer>aside>ul>li.action,.mainContainer>aside>ul>li:hover {
+	color: #000;
+	background: #FFF;
+	border-radius: 5px;
+	font-size: 16px;
+}
+
+.mainContainer>article {
+	width: 75%;
+	display: flex;
+	flex-direction: column;
+}
+
+.mainContainer > article > section.uploadContainer{
+	width: 100%;
+	height: 30%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.mainContainer > article > section.uploadContainer > .uploader{
+	width: 500px;
+	height: 150px;
+	border: 2px dashed #DDD;
+	border-radius: 15px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transition: all .5s; 
+}
+.mainContainer > article > section.uploadContainer > .abcd{
+	border: 2px solid green;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: green;
+}
+.mainContainer > article > section.uploadContainer > .uploader > p{
+	color: #FFF;
+	font-size: 16px;
+}
+.mainContainer > article > section.uploadContainer > .uploader > p > b{
+	font-size: 18px;
+	cursor: pointer;
+}
+
+
+
+.mainContainer > article > section.missionList{
+	width: 100%;
+	height: 70%;
+}
