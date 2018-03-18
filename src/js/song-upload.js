@@ -42,12 +42,13 @@
 					},
 					'BeforeUpload': function(up, file) {
 						console.log('--------开始上传--------')
-						console.log(file)
 						qiniuFile.domain = up.getOption('domain');
 						qiniuFile.name = file.name;
+						qiniuFile.id = file.id;
 						qiniuFile.sourceLink = qiniuFile.domain + encodeURIComponent(qiniuFile.name);
 						window.eventHub.emit('beginUpload', {
-							key: qiniuFile.name
+							key: qiniuFile.name,
+							id: qiniuFile.id
 						})
 					},
 					'UploadProgress': function(up, file) {

@@ -110,7 +110,7 @@ html {
 }
 
 .mainContainer>main>aside>ul>li.action,
-.mainContainer>main>aside>ul>li:hover {
+.mainContainer>main>aside>ul>li.uploaded:hover {
 	color: #000;
 	background: #FFF;
 	font-size: 16px;
