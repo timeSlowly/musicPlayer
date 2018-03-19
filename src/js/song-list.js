@@ -1,27 +1,34 @@
 {
 	let view = {
-		el: 'aside ul',
+		el: {
+			songlist: 'aside ul',
+			songInfo: 'main section'
+		},
 		find(selector) {
-			return $(this.el).find(selector)
+			return $(this.el.songlist).find(selector)
 		},
-		template: {
-
-		},
-		render(data) {
-			console.log(data)
+		renderSonglist(data) {
 			let _html = ''
 			for(var i = 0; i < data.songs.length; i++) {
-				_html += `<li id='${data.songs[i].id}' class='uploaded'>${data.songs[i].name} - ${data.songs[i].artist}</li>`
+				console.log(data)
+				_html += `<li id='${data.songs[i].songID}' objectid='${data.songs[i].id}' class='uploaded' data='${data.songs[i].link}'>${data.songs[i].name} - ${data.songs[i].artist}</li>`
 			}
-			console.log(_html)
-			$(this.el).html(_html)
+			$(this.el.songlist).html(_html)
 		},
-		addList(data){
-			$(this.el).append(data)
+		fillSonginfo(data) {
+			let $this = this.find('#' + data.id)
+			$(this.el.songInfo).find('.name').val($this.html())
+			$(this.el.songInfo).find('.link').val($this.attr('data'))
+			$(this.el.songInfo).find('.submit').attr('id',data.objectid)
+			$(this.el.songInfo).css('display', 'flex')
+		},
+		addList(data) {
+			$(this.el.songlist).append(data)
 		}
 	}
 	let model = {
 		songList: {
+			//从Lencloud上获取到的数据
 			songs: []
 		},
 		find() {
@@ -44,26 +51,47 @@
 			this.initLencloud()
 			this.bindEvents()
 			this.eventHub()
-			this.model.find().then(()=>{
-				this.view.render(this.model.songList)
+			this.model.find().then(() => {
+				this.view.renderSonglist(this.model.songList)
+				console.log(this.model.songList)
 			})
 		},
 		bindEvents() {
-			$(this.view.el).on('click', 'li.uploaded', function() {
+			$(this.view.el.songlist).on('click', 'li.uploaded', function() {
+				let id = ''
+				let objectid = ''
 				$(this).addClass('action').siblings().removeClass('action')
+				id = $(this).attr('id')
+				objectid = $(this).attr('objectid')
+				view.fillSonginfo({
+					id: id,
+					objectid: objectid
+				})
+			})
+			$(this.view.el.songInfo).find('.submit').on('click', ()=> {
+				let id = $(this.view.el.songInfo).find('.submit').attr('id')
+				let name = $(this.view.el.songInfo).find('.name').val()
+				let artist = $(this.view.el.songInfo).find('.artist').val()
+				controller.modify_songInfo({
+					id: id,
+					key: name,
+					artist: artist
+				})
 			})
 		},
 		eventHub() {
 			window.eventHub.on('beginUpload', (data) => {
-				let _html = '<li class="uploading" id="' + data.id + '">' + data.key + '<div class="bar"></div></li>'
+				let _html = '<li class="uploading" id="' + data.id + '" data="' + data.link + '">' + data.key + '<div class="bar"></div></li>'
 				this.view.addList(_html)
+				this.upload_songInfo(data)
+				console.log('开始上传得到的数据')
+				console.log(data)
 			})
 			window.eventHub.on('uploading', (data) => {
 				this.view.find('li.uploading .bar').css("width", data + "%")
 			})
 			window.eventHub.on('uploaded', (data) => {
 				this.view.find('li.uploading').addClass('uploaded').removeClass('uploading').find('.bar').removeClass('bar')
-				
 			})
 		},
 		initLencloud() {
@@ -73,6 +101,29 @@
 				appId,
 				appKey
 			});
+		},
+		upload_songInfo(data) {
+			let songList = AV.Object.extend('songList');
+			let songlist = new songList();
+			songlist.set('songID', data.id);
+			songlist.set('name', data.key);
+			songlist.set('artist', data.artist);
+			songlist.set('link', data.link);
+			songlist.save().then(function(songlist) {
+				console.log('lencloud上传完成')
+				console.log(songlist)
+			}, function(error) {
+				console.log(error)
+				alert('上传失败，稍后重试')
+			});
+		},
+		modify_songInfo(data) {
+			console.log(data)
+			var modifyInfo = AV.Object.createWithoutData('songList', data.id);
+			modifyInfo.set('name', data.key);
+			modifyInfo.set('artist', data.artist);
+			console.log(modifyInfo)
+			modifyInfo.save();
 		}
 
 	}

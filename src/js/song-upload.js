@@ -48,7 +48,8 @@
 						qiniuFile.sourceLink = qiniuFile.domain + encodeURIComponent(qiniuFile.name);
 						window.eventHub.emit('beginUpload', {
 							key: qiniuFile.name,
-							id: qiniuFile.id
+							id: qiniuFile.id,
+							link: qiniuFile.sourceLink
 						})
 					},
 					'UploadProgress': function(up, file) {
